@@ -322,26 +322,19 @@ TypeScript
 ===
 
 ## Different with ECMA Script
-#### Getters and setters
-
-```ts
-class C1 {
-    private _a: string;
-    get a(): string { return 'Value: ' + this._a; }
-    set a(newA: string) { this._a = newA; }
-}
-
-let obj: C1 = new C1();
-obj.a = 'test';
-console.log(obj.a); // Value: test
-````
+#### Most needed features
 ---
 
 TypeScript
 ===
 
 ## Different with ECMA Script
-#### Most needed features
+#### Decorators
+
+```ts
+@SomeDecorator
+someThing
+````
 ---
 
 TypeScript
@@ -374,14 +367,14 @@ class Foo {
   print() { console.log('x is ' + this.x); }
 }
 
-var f = new Foo();
+let f = new Foo();
 f.print(); // Prints 'x is 3' as expected
 
 // Use the class method in an object literal
-var z = { x: 10, p: f.print };
+let z = { x: 10, p: f.print };
 z.p(); // Prints 'x is 10'
 
-var p = z.p;
+let p = z.p;
 p(); // Prints 'x is undefined'
 ````
 ---
@@ -403,7 +396,7 @@ class MyClass {
         alert(this.status);
     }
 }
-var x = new MyClass();
+let x = new MyClass();
 $(document).ready(x.run);
 ````
 ---
@@ -418,7 +411,7 @@ TypeScript
 Local Fat Arrow
 
 ```ts
-var x = new SomeClass();
+let x = new SomeClass();
 someCallback((n, m) => x.doSomething(n, m));
 ````
 ---
@@ -433,13 +426,154 @@ TypeScript
 Function.bind
 
 ```ts
-var x = new SomeClass();
+let x = new SomeClass();
 window.setTimeout(x.someMethod.bind(x), 100);
 ````
 ---
 
-
-TypeScript
+Rx.JS
 ===
 
-## The end
+<img src="images/rxjs-logo.png" width="40%" alt="Rx.JS" />
+
+---
+
+Rx.JS
+===
+
+## Conceptions
+
+- converting existing code for async operations into observables
+- iterating through the values in a stream
+- mapping values to different types
+- filtering streams
+- composing multiple streams
+---
+
+Rx.JS
+===
+
+## Observable and Subjects
+---
+
+Rx.JS
+===
+
+## Observable and Subjects
+#### Observable
+
+```ts
+import { Observable } from 'rxjs';
+
+const observable = new Observable(observer => {
+  setTimeout(() => 
+      observer.next('hello from Observable!'), 1000);
+});
+
+observable.subscribe(v => console.log(v));
+````
+---
+
+Rx.JS
+===
+
+## Observable and Subjects
+#### Subjects
+
+```ts
+import { Subject } from 'rxjs';
+
+const subject = new Subject();
+
+subject.next('missed message from Subject');
+
+subject.subscribe(v => console.log(v));
+
+subject.next('hello from subject!');
+````
+---
+
+Rx.JS
+===
+
+## Simple flow
+
+```ts
+import { fromPromise } from 'rxjs';
+
+// Create an Observable out of a promise
+const data = fromPromise(fetch('/api/endpoint'));
+// Subscribe to begin listening for async result
+data.subscribe({
+ next(response) { console.log(response); },
+ error(err) { console.error('Error: ' + err); },
+ complete() { console.log('Completed'); }
+});
+````
+---
+
+Rx.JS
+===
+
+## Complex flow
+
+```ts
+import { from } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+
+//emit (1,2,3,4,5)
+const source = from([1, 2, 3, 4, 5]);
+
+const example = source
+  .pipe(map(val => val + 10))
+  .pipe(filter(num => num % 2 === 0));
+//output: [12, 14]
+const subscribe = example.subscribe(val => console.log(val));
+````
+---
+
+Rx.JS
+===
+
+## Multicast (useful with http client)
+
+```ts
+import { timer } from 'rxjs';
+import { tap, mapTo, share } from 'rxjs/operators';
+
+//emit value in 1s
+const source = timer(1000);
+//log side effect, emit result
+const example = source.pipe(
+  tap(() => console.log('***SIDE EFFECT***')),
+  mapTo('***RESULT***')
+);
+````
+---
+
+Rx.JS
+===
+
+## Multicast (useful with http client)
+
+```ts
+//  NOT SHARED, SIDE EFFECT WILL BE EXECUTED TWICE:
+//  "***SIDE EFFECT***"
+//  "***RESULT***"
+//  "***SIDE EFFECT***"
+//  "***RESULT***"
+const subscrb1 = example.subscribe(val => console.log(val));
+const subscrb2 = example.subscribe(val => console.log(val));
+
+//share observable among subscribers
+const shared = example.pipe(share());
+
+//  SHARED, SIDE EFFECT EXECUTED ONCE:
+//  "***SIDE EFFECT***"
+//  "***RESULT***"
+//  "***RESULT***"
+const subscrb3 = shared.subscribe(val => console.log(val));
+const subscrb4 = shared.subscribe(val => console.log(val));
+````
+---
+
