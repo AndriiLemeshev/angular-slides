@@ -577,3 +577,10 @@ const subscrb4 = shared.subscribe(val => console.log(val));
 ````
 ---
 
+Angular
+===
+
+<img src="images/angular-logo.svg" width="40%" alt="angular" />
+
+---
+
