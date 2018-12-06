@@ -224,9 +224,8 @@ TypeScript
 #### Functions syntax
 
 ```ts
-function f1(a) { return a; }
-const f2 = (a) => a;
-let f3 = (a) => { return a; };
+const f1 = (a) => a;
+let f2 = (a) => { return a; };
 ````
 ---
 
