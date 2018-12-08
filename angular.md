@@ -444,8 +444,48 @@ Angular
 
 ## Component
 
-<img src="images/angular-architecture.png" alt="angular architecture" />
+```ts
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
+@Component({
+  selector: 'app-counter',
+  templateUrl: './counter.component.html',
+  styleUrls: ['./counter.component.css']
+})
+export class CounterComponent implements OnInit {
+  constructor() { }
+  ngOnInit() {}
+  
+  // ...
+}
+````
+---
+
+Angular
+===
+
+## Component
+
+```ts
+export class CounterComponent implements OnInit {
+  @Input() label: string;
+
+  @Output() isEvenEvt: EventEmitter<boolean> = new EventEmitter();
+
+  @Output() valueChange: EventEmitter<number> = new EventEmitter();
+  _value = 0;
+
+  @Input() get value() { return this._value; }
+  set value(value: number) {
+    this._value = value;
+    this.valueChange.emit(this._value);
+    this.isEvenEvt.emit(Math.abs(this._value % 2) === 1);
+  }
+
+  incr() { this.value++; }
+  decr() { this.value--; }
+}
+````
 ---
 
 Angular
@@ -453,8 +493,19 @@ Angular
 
 ## Template
 
-<img src="images/angular-architecture.png" alt="angular architecture" />
-
+```html
+<app-counter
+    label="Counter #1"
+    #counter1 [value]="11"
+    (isEvenEvt)="indicator1.setTitleByIsEven($event)">
+</app-counter>
+<app-counter [label]="'Counter #2'"
+             #counter2
+             [(value)]="counter1.value">
+</app-counter>
+<hr/>
+<app-even-odd-indicator #indicator1></app-even-odd-indicator>
+````
 ---
 
 Angular
@@ -462,8 +513,26 @@ Angular
 
 ## Service
 
-<img src="images/angular-architecture.png" alt="angular architecture" />
+```ts
+@Injectable({
+  providedIn: 'root'
+})
+export class WeatherService {
+  constructor(private http: HttpClient) { }
 
+  get(): Observable<any> {
+    return this.http
+      .get<WeatherApiResponse>(url)
+      .pipe<Weather>(map(response => new Weather(
+        response.query.results.channel.location.country,
+        response.query.results.channel.location.city,
+        response.query.results.channel.item.condition.temp,
+        response.query.results.channel.units.temperature,
+        response.query.results.channel.item.condition.text,
+      )));
+  }
+}
+````
 ---
 
 Angular
@@ -471,8 +540,24 @@ Angular
 
 ## Routing
 
-<img src="images/angular-architecture.png" alt="angular architecture" />
+```ts
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import {MainPageComponent} from './main-page/main-page.component';
+import {AboutPageComponent} from './about-page/about-page.component';
 
+const routes: Routes = [
+  {path: '', pathMatch: 'full', redirectTo: 'main'},
+  {path: 'main', pathMatch: 'full', component: MainPageComponent},
+  {path: 'about', pathMatch: 'full', component: AboutPageComponent}
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+````
 ---
 
 Angular
