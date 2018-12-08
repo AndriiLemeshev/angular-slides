@@ -396,52 +396,6 @@ const subscribe = example.subscribe(val => console.log(val));
 ````
 ---
 
-Rx.JS
-===
-
-## Multicast (useful with http client)
-
-```ts
-import { timer } from 'rxjs';
-import { tap, mapTo, share } from 'rxjs/operators';
-
-//emit value in 1s
-const source = timer(1000);
-
-//log side effect, emit result
-const example = source.pipe(
-  tap(() => console.log('***SIDE EFFECT***')),
-  mapTo('***RESULT***')
-);
-````
----
-
-Rx.JS
-===
-
-## Multicast (useful with http client)
-
-```ts
-//  NOT SHARED, SIDE EFFECT WILL BE EXECUTED TWICE:
-//  "***SIDE EFFECT***"
-//  "***RESULT***"
-//  "***SIDE EFFECT***"
-//  "***RESULT***"
-const subscrb1 = example.subscribe(val => console.log(val));
-const subscrb2 = example.subscribe(val => console.log(val));
-
-//share observable among subscribers
-const shared = example.pipe(share());
-
-//  SHARED, SIDE EFFECT EXECUTED ONCE:
-//  "***SIDE EFFECT***"
-//  "***RESULT***"
-//  "***RESULT***"
-const subscrb3 = shared.subscribe(val => console.log(val));
-const subscrb4 = shared.subscribe(val => console.log(val));
-````
----
-
 Angular
 ===
 
@@ -449,5 +403,146 @@ Angular
 
 ---
 
+Angular
+===
 
+## Architecture
 
+<img src="images/angular-architecture.png" alt="angular architecture" />
+
+---
+
+Angular
+===
+
+## Module
+
+```ts
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+````
+---
+
+Angular
+===
+
+## Component
+
+<img src="images/angular-architecture.png" alt="angular architecture" />
+
+---
+
+Angular
+===
+
+## Template
+
+<img src="images/angular-architecture.png" alt="angular architecture" />
+
+---
+
+Angular
+===
+
+## Service
+
+<img src="images/angular-architecture.png" alt="angular architecture" />
+
+---
+
+Angular
+===
+
+## Routing
+
+<img src="images/angular-architecture.png" alt="angular architecture" />
+
+---
+
+Angular
+===
+
+## Project structure (folders)
+
+|Folder|Description|
+|:-:|:-:|
+|/e2e|end-to-end test app|
+|/src|main source folders|
+|/src/app|app module folder|
+|/src/assets|image files and other assets|
+|/src/environments|build configuration options|
+---
+
+Angular
+===
+
+## Project structure (files)
+
+|File|Description|
+|:-:|:-:|
+|package.json|npm project config|
+|angular.json|angular project config|
+|tsconfig*.json|typescript compiller configs|
+|tslint*.json|typescript codestyle checker config|
+---
+
+Angular
+===
+
+## Project structure (files)
+
+|File|Description|
+|:-:|:-:|
+|browserlist|configures sharing of target browsers|
+|favicon.ico|favicon file|
+|index.html|main HTML page|
+|main.ts|main entry point|
+|polyfills.ts|polyfill scripts for browser support|
+|styles.css|lists CSS files that supply styles for a project|
+|test.ts|main entry point for unit tests|
+---
+
+Angular
+===
+
+## Angular CLI
+
+```bash
+npm install -g @angular/cli
+ng new my-dream-app
+ng generate <some> <some-name>
+# ng build
+# ng serve --proxy-config proxy.config.json
+ng serve
+````
+---
+
+Angular
+===
+
+## Tools
+
+- Ng-Bootstrap + Bootstrap 4
+- Angular Materials
+- JSON Server
+
+---
+
+FIN
+===
