@@ -322,6 +322,15 @@ Rx.JS
 Rx.JS
 ===
 
+## Conceptions
+
+<img src="images/reactive-flow.png" />
+
+---
+
+Rx.JS
+===
+
 ## Observable and Subjects
 #### Observable
 
@@ -506,6 +515,73 @@ Angular
 <hr/>
 <app-even-odd-indicator #indicator1></app-even-odd-indicator>
 ````
+---
+
+Angular
+===
+
+## Directive
+
+- Structural directives (NgFor and NgIf)
+- Attribute directives (NgStyle and NgClass)
+---
+
+Angular
+===
+
+## Directive NgIf
+
+```html
+<button (click)="show=!show">{{show?'hide':'show'}}</button>
+show = {{show}}
+<br>
+<div *ngIf="show">Text to show</div>
+````
+---
+
+Angular
+===
+
+## Directive NgFor
+
+```html
+<li *ngFor="let item of items">{{ item }}</li>
+````
+---
+
+Angular
+===
+
+## Directive NgClass
+
+```html
+<some-el [ngClass]="'a b'">...</some-el>
+<some-el [ngClass]="['a', 'b']">...</some-el>
+<some-el [ngClass]="{'a': 1 < 2, 'b': 2 > -3}"></some-el>
+````
+---
+
+Angular
+===
+
+## Directive NgStyle
+
+```html
+<some-element [ngStyle]="{'font-style': styleExp}">
+  demo
+</some-element>
+````
+---
+
+Angular
+===
+
+## Directive Pipes
+ - syntax
+```html
+{{ birthday | date:"MM/dd/yy" }}
+````
+ - build in pipes (DatePipe, UpperCasePipe, LowerCasePipe, CurrencyPipe and PercentPipe)
 ---
 
 Angular
